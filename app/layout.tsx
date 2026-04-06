@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "VisaPulse — Real visa outcomes from real people",
   description:
     "Crowdsourced visa approval and rejection statistics. Submit your case and explore real-world data.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default async function RootLayout({
