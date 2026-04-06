@@ -71,10 +71,7 @@ export default function BlogPostPage({ params }: Props) {
 
       <header className="mt-6 border-b border-white/10 pb-8">
         <p className="text-sm text-zinc-500">{formatted}</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-          {frontmatter.title}
-        </h1>
-        <p className="mt-4 text-lg text-zinc-400">{frontmatter.description}</p>
+        <p className="mt-2 text-lg text-zinc-400">{frontmatter.description}</p>
         <p className="mt-3 text-sm text-zinc-600">By {frontmatter.author}</p>
       </header>
 
