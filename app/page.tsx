@@ -2,7 +2,13 @@ import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { FilterBar } from "@/components/FilterBar";
 import { CasesSection } from "@/components/CasesSection";
+import { AnalyticsSection } from "@/components/AnalyticsSection";
 import { fetchAllCases } from "@/lib/supabase/server";
+import {
+  getApprovalRateByCountry,
+  getResultsByVisaType,
+  getWeeklySubmissions,
+} from "@/lib/analytics";
 import {
   approvalRate,
   averageIncomeApproved,
@@ -66,6 +72,14 @@ export default async function HomePage({
     (a, b) =>
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
+  const approvalByCountry = getApprovalRateByCountry(allCases);
+  const resultsByVisaType = getResultsByVisaType(allCases);
+  const weeklySubmissions = getWeeklySubmissions(allCases, 12);
+  const weeklyCaseCount = allCases.filter((c) => {
+    const t = new Date(c.created_at).getTime();
+    const min = Date.now() - 12 * 7 * 24 * 60 * 60 * 1000;
+    return Number.isFinite(t) && t >= min;
+  }).length;
 
   return (
     <div className="mx-auto max-w-5xl px-4 pb-20 pt-10 sm:px-6">
@@ -155,6 +169,13 @@ export default async function HomePage({
           </p>
         </div>
       </section>
+
+      <AnalyticsSection
+        approvalByCountry={approvalByCountry}
+        resultsByVisaType={resultsByVisaType}
+        weeklySubmissions={weeklySubmissions}
+        weeklyCaseCount={weeklyCaseCount}
+      />
 
       <CasesSection
         cases={sortedForList}
