@@ -75,7 +75,7 @@ export function SubmitForm() {
           Your case was submitted. Redirecting you to the live dashboard...
         </p>
         <Link
-          href="/"
+          href="/?submitted=1"
           className="mt-6 inline-flex rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-background hover:bg-sky-400"
         >
           Back to dashboard
