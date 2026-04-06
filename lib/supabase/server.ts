@@ -27,3 +27,20 @@ export async function fetchAllCases(): Promise<VisaCase[]> {
     return [];
   }
 }
+
+export async function fetchTotalCaseCount(): Promise<number> {
+  try {
+    const supabase = createServerSupabase();
+    if (!supabase) return 0;
+    const { count, error } = await supabase
+      .from("visa_cases")
+      .select("id", { count: "exact", head: true });
+    if (error) {
+      console.error("Supabase count error:", error.message);
+      return 0;
+    }
+    return count ?? 0;
+  } catch {
+    return 0;
+  }
+}

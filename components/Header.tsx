@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export function Header() {
+export function Header({ totalCases }: { totalCases: number }) {
   return (
     <header className="border-b border-white/10 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
@@ -10,12 +10,21 @@ export function Header() {
           </span>
           <span className="text-xs text-zinc-500">by Relova</span>
         </Link>
-        <Link
-          href="/submit"
-          className="shrink-0 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-background transition hover:bg-sky-400"
-        >
-          Submit Your Case
-        </Link>
+        <div className="flex items-center gap-3">
+          <p className="hidden items-center gap-1.5 text-sm text-zinc-500 sm:inline-flex">
+            <span aria-hidden>👥</span>
+            <span className="font-semibold text-[#22C55E]">
+              {totalCases.toLocaleString()}
+            </span>
+            <span>cases shared</span>
+          </p>
+          <Link
+            href="/submit"
+            className="shrink-0 rounded-lg bg-[#22C55E] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#16A34A]"
+          >
+            Submit Your Case
+          </Link>
+        </div>
       </div>
     </header>
   );
