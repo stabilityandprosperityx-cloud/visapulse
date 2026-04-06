@@ -56,6 +56,36 @@ export async function fetchTotalCaseCount(): Promise<number> {
   }
 }
 
+/** One page of cases for current filters, newest first (not limited by global fetch cap). */
+export async function fetchFilteredCasesPage(
+  country: string | null,
+  visaType: string | null,
+  page: number,
+  perPage: number
+): Promise<VisaCase[]> {
+  noStore();
+  try {
+    const supabase = createServerSupabase();
+    if (!supabase) return [];
+    const safePage = Math.max(1, page);
+    const from = (safePage - 1) * perPage;
+    const to = from + perPage - 1;
+    let q = supabase.from("visa_cases").select("*");
+    if (country) q = q.eq("country", country);
+    if (visaType) q = q.eq("visa_type", visaType);
+    const { data, error } = await q
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (error) {
+      console.error("Supabase paged fetch error:", error.message);
+      return [];
+    }
+    return (data ?? []) as VisaCase[];
+  } catch {
+    return [];
+  }
+}
+
 /** Exact row count for current filters (matches filterCases). */
 export async function fetchFilteredCaseCount(
   country: string | null,

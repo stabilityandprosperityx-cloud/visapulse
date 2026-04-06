@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useTransition } from "react";
+import { buildDashboardPath } from "@/lib/dashboard-search-params";
 import { COUNTRIES, VISA_TYPES } from "@/lib/constants";
 
 export function FilterBar() {
@@ -14,19 +15,17 @@ export function FilterBar() {
 
   const update = useCallback(
     (next: { country?: string; visa?: string }) => {
-      const params = new URLSearchParams(searchParams.toString());
       const c = next.country !== undefined ? next.country : country;
       const v = next.visa !== undefined ? next.visa : visa;
-      if (c) params.set("country", c);
-      else params.delete("country");
-      if (v) params.set("visa", v);
-      else params.delete("visa");
-      const q = params.toString();
+      const path = buildDashboardPath({
+        country: c || null,
+        visa: v || null,
+      });
       startTransition(() => {
-        router.push(q ? `/?${q}` : "/");
+        router.push(path);
       });
     },
-    [country, visa, router, searchParams]
+    [country, visa, router]
   );
 
   return (

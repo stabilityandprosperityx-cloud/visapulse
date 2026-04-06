@@ -1,14 +1,15 @@
 import { Suspense } from "react";
-import { cookies } from "next/headers";
 import { FilterBar } from "@/components/FilterBar";
 import { CasesSection } from "@/components/CasesSection";
 import { AnalyticsSection } from "@/components/AnalyticsSection";
 import { LiveCasesMeta } from "@/components/LiveCasesMeta";
 import { formatCount } from "@/lib/format";
 import { SubmitSuccessRefresh } from "@/components/SubmitSuccessRefresh";
+import { CASES_PER_PAGE } from "@/lib/pagination";
 import {
   fetchAllCases,
   fetchFilteredCaseCount,
+  fetchFilteredCasesPage,
   fetchTotalCaseCount,
 } from "@/lib/supabase/server";
 import {
@@ -49,17 +50,40 @@ function StatPill({
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: { country?: string; visa?: string };
+  searchParams: { country?: string; visa?: string; page?: string };
 }) {
   const country = searchParams.country?.trim() || null;
   const visaType = searchParams.visa?.trim() || null;
+  const pageRaw = searchParams.page?.trim();
+  const pageParsed = pageRaw ? parseInt(pageRaw, 10) : 1;
+  const requestedPage =
+    Number.isFinite(pageParsed) && pageParsed >= 1 ? pageParsed : 1;
 
-  const [allCases, dbTotalCount, selectionCount] = await Promise.all([
-    fetchAllCases(),
-    fetchTotalCaseCount(),
-    fetchFilteredCaseCount(country, visaType),
-  ]);
+  const [allCases, dbTotalCount, selectionCount, tentativeListCases] =
+    await Promise.all([
+      fetchAllCases(),
+      fetchTotalCaseCount(),
+      fetchFilteredCaseCount(country, visaType),
+      fetchFilteredCasesPage(
+        country,
+        visaType,
+        requestedPage,
+        CASES_PER_PAGE
+      ),
+    ]);
   const filtered = filterCases(allCases, country, visaType);
+
+  const totalPages = Math.max(1, Math.ceil(selectionCount / CASES_PER_PAGE));
+  const currentPage = Math.min(requestedPage, totalPages);
+  const listCases =
+    currentPage === requestedPage
+      ? tentativeListCases
+      : await fetchFilteredCasesPage(
+          country,
+          visaType,
+          currentPage,
+          CASES_PER_PAGE
+        );
 
   const totalCount = dbTotalCount;
   const overallRate = approvalRate(allCases);
@@ -77,13 +101,6 @@ export default async function HomePage({
         ? "text-approved"
         : "text-rejected";
 
-  const cookieStore = cookies();
-  const unlocked = cookieStore.get("visapulse_contributor")?.value === "1";
-
-  const sortedForList = [...filtered].sort(
-    (a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  );
   const approvalByCountry = getApprovalRateByCountry(allCases);
   const resultsByVisaType = getResultsByVisaType(allCases);
   const weeklySubmissions = getWeeklySubmissions(allCases, 12);
@@ -191,9 +208,12 @@ export default async function HomePage({
       />
 
       <CasesSection
-        cases={sortedForList}
+        cases={listCases}
         totalCount={selectionCount}
-        unlocked={unlocked}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        country={country}
+        visaType={visaType}
       />
 
       <aside className="mt-14 rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/10 to-transparent p-6 text-center sm:p-8">

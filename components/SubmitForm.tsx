@@ -10,6 +10,7 @@ import {
   VISA_TYPES,
   type ResultValue,
 } from "@/lib/constants";
+import { buildDashboardPath } from "@/lib/dashboard-search-params";
 
 export function SubmitForm() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export function SubmitForm() {
   useEffect(() => {
     if (!done) return;
     const timer = window.setTimeout(() => {
-      router.push("/?submitted=1");
+      router.push(buildDashboardPath({ submitted: true }));
     }, 900);
     return () => {
       window.clearTimeout(timer);
@@ -75,7 +76,7 @@ export function SubmitForm() {
           Your case was submitted. Redirecting you to the live dashboard...
         </p>
         <Link
-          href="/?submitted=1"
+          href={buildDashboardPath({ submitted: true })}
           className="mt-6 inline-flex rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-background hover:bg-sky-400"
         >
           Back to dashboard
