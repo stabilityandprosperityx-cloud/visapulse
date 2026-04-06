@@ -187,7 +187,7 @@ export default async function HomePage({
         <p className="text-lg font-medium text-white sm:text-xl">
           Planning to relocate? Get your personalized step-by-step plan at{" "}
           <a
-            href="https://relova.com"
+            href="https://relova.ai"
             target="_blank"
             rel="noopener noreferrer"
             className="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
