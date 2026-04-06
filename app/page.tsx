@@ -5,7 +5,12 @@ import { CasesSection } from "@/components/CasesSection";
 import { AnalyticsSection } from "@/components/AnalyticsSection";
 import { LiveCasesMeta } from "@/components/LiveCasesMeta";
 import { formatCount } from "@/lib/format";
-import { fetchAllCases, fetchTotalCaseCount } from "@/lib/supabase/server";
+import { SubmitSuccessRefresh } from "@/components/SubmitSuccessRefresh";
+import {
+  fetchAllCases,
+  fetchFilteredCaseCount,
+  fetchTotalCaseCount,
+} from "@/lib/supabase/server";
 import {
   getApprovalRateByCountry,
   getResultsByVisaType,
@@ -49,9 +54,10 @@ export default async function HomePage({
   const country = searchParams.country?.trim() || null;
   const visaType = searchParams.visa?.trim() || null;
 
-  const [allCases, dbTotalCount] = await Promise.all([
+  const [allCases, dbTotalCount, selectionCount] = await Promise.all([
     fetchAllCases(),
     fetchTotalCaseCount(),
+    fetchFilteredCaseCount(country, visaType),
   ]);
   const filtered = filterCases(allCases, country, visaType);
 
@@ -61,7 +67,7 @@ export default async function HomePage({
   const mostRejected = topVisaByResult(allCases, "rejected");
 
   const selRate = approvalRate(filtered);
-  const selTotal = filtered.length;
+  const selTotal = selectionCount;
   const selAvgIncome = averageIncomeApproved(filtered);
 
   const rateColor =
@@ -89,6 +95,9 @@ export default async function HomePage({
 
   return (
     <div className="mx-auto max-w-5xl px-4 pb-20 pt-10 sm:px-6">
+      <Suspense fallback={null}>
+        <SubmitSuccessRefresh />
+      </Suspense>
       <section className="text-center">
         <h1 className="text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
           Real Visa Approval Data. From Real People.
@@ -183,7 +192,7 @@ export default async function HomePage({
 
       <CasesSection
         cases={sortedForList}
-        totalCount={totalCount}
+        totalCount={selectionCount}
         unlocked={unlocked}
       />
 

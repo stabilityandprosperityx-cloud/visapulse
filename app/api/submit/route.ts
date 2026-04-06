@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { hashIp, clientIpFromHeaders } from "@/lib/ip-hash";
@@ -68,6 +69,9 @@ export async function POST(request: Request) {
     console.error("Insert failed:", insertError.message);
     return NextResponse.json({ error: "Could not save submission" }, { status: 500 });
   }
+
+  revalidatePath("/", "page");
+  revalidatePath("/", "layout");
 
   const res = NextResponse.json({ ok: true });
   res.cookies.set(COOKIE_NAME, "1", {

@@ -27,8 +27,7 @@ export function SubmitForm() {
   useEffect(() => {
     if (!done) return;
     const timer = window.setTimeout(() => {
-      router.push("/");
-      router.refresh();
+      router.push("/?submitted=1");
     }, 900);
     return () => {
       window.clearTimeout(timer);
