@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   COUNTRIES,
   INCOME_RANGES,
@@ -11,6 +12,7 @@ import {
 } from "@/lib/constants";
 
 export function SubmitForm() {
+  const router = useRouter();
   const [country, setCountry] = useState("");
   const [visaType, setVisaType] = useState("");
   const [visaTypeOther, setVisaTypeOther] = useState("");
@@ -21,6 +23,17 @@ export function SubmitForm() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (!done) return;
+    const timer = window.setTimeout(() => {
+      router.push("/");
+      router.refresh();
+    }, 900);
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [done, router]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -60,7 +73,7 @@ export function SubmitForm() {
       <div className="rounded-2xl border border-approved/40 bg-approved/10 p-8 text-center">
         <p className="text-lg font-semibold text-white">Thank you!</p>
         <p className="mt-2 text-sm text-zinc-300">
-          Your case was submitted. The dashboard is updated in real time.
+          Your case was submitted. Redirecting you to the live dashboard...
         </p>
         <Link
           href="/"

@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { FilterBar } from "@/components/FilterBar";
 import { CasesSection } from "@/components/CasesSection";
 import { AnalyticsSection } from "@/components/AnalyticsSection";
+import { LiveCasesMeta } from "@/components/LiveCasesMeta";
 import { fetchAllCases } from "@/lib/supabase/server";
 import {
   getApprovalRateByCountry,
@@ -17,6 +18,7 @@ import {
 } from "@/lib/stats";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 function StatPill({
   label,
@@ -87,9 +89,7 @@ export default async function HomePage({
         <h1 className="text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
           Real Visa Approval Data. From Real People.
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-base text-zinc-400 sm:text-lg">
-          {totalCount.toLocaleString()} cases submitted. Updated in real time.
-        </p>
+        <LiveCasesMeta totalCount={totalCount} />
       </section>
 
       <section className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
