@@ -27,6 +27,8 @@ export function validateSubmitBody(body: unknown):
 
   const country = typeof o.country === "string" ? o.country.trim() : "";
   const visa_type = typeof o.visa_type === "string" ? o.visa_type.trim() : "";
+  const visa_type_other =
+    typeof o.visa_type_other === "string" ? o.visa_type_other.trim() : "";
   const income_range =
     typeof o.income_range === "string" ? o.income_range.trim() : "";
   const result = typeof o.result === "string" ? o.result.trim() : "";
@@ -54,6 +56,17 @@ export function validateSubmitBody(body: unknown):
     return { ok: false, error: "Invalid processing time" };
   }
 
+  let normalizedVisaType = visa_type;
+  if (visa_type === "Other") {
+    if (!visa_type_other) {
+      return { ok: false, error: "Please specify your visa type" };
+    }
+    if (visa_type_other.length > 50) {
+      return { ok: false, error: "Visa type must be 50 characters or less" };
+    }
+    normalizedVisaType = visa_type_other;
+  }
+
   let note: string | null = null;
   if (noteRaw !== undefined && noteRaw !== null && noteRaw !== "") {
     if (typeof noteRaw !== "string") {
@@ -70,7 +83,7 @@ export function validateSubmitBody(body: unknown):
     ok: true,
     data: {
       country,
-      visa_type,
+      visa_type: normalizedVisaType,
       income_range,
       result: result as ResultValue,
       processing_time,

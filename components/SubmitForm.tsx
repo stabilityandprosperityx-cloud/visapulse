@@ -13,6 +13,7 @@ import {
 export function SubmitForm() {
   const [country, setCountry] = useState("");
   const [visaType, setVisaType] = useState("");
+  const [visaTypeOther, setVisaTypeOther] = useState("");
   const [income, setIncome] = useState("");
   const [result, setResult] = useState<ResultValue>("approved");
   const [processing, setProcessing] = useState("");
@@ -32,6 +33,7 @@ export function SubmitForm() {
         body: JSON.stringify({
           country,
           visa_type: visaType,
+          visa_type_other: visaType === "Other" ? visaTypeOther.trim() : null,
           income_range: income,
           result,
           processing_time: processing,
@@ -108,7 +110,11 @@ export function SubmitForm() {
         <select
           required
           value={visaType}
-          onChange={(e) => setVisaType(e.target.value)}
+          onChange={(e) => {
+            const next = e.target.value;
+            setVisaType(next);
+            if (next !== "Other") setVisaTypeOther("");
+          }}
           className="mt-1.5 w-full rounded-lg border border-white/10 bg-background px-3 py-2.5 text-white outline-none ring-accent focus:ring-2"
         >
           <option value="" disabled>
@@ -121,6 +127,23 @@ export function SubmitForm() {
           ))}
         </select>
       </label>
+      {visaType === "Other" ? (
+        <label className="block text-sm text-zinc-400">
+          Specify visa type
+          <input
+            required
+            type="text"
+            value={visaTypeOther}
+            onChange={(e) => setVisaTypeOther(e.target.value.slice(0, 50))}
+            maxLength={50}
+            placeholder="e.g. Cultural exchange permit"
+            className="mt-1.5 w-full rounded-lg border border-white/10 bg-background px-3 py-2.5 text-white placeholder:text-zinc-600 outline-none ring-accent focus:ring-2"
+          />
+          <span className="mt-1 block text-right text-xs text-zinc-600">
+            {visaTypeOther.length}/50
+          </span>
+        </label>
+      ) : null}
 
       <label className="block text-sm text-zinc-400">
         Monthly income
