@@ -17,7 +17,8 @@ export async function fetchAllCases(): Promise<VisaCase[]> {
     const { data, error } = await supabase
       .from("visa_cases")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(10_000);
     if (error) {
       console.error("Supabase fetch error:", error.message);
       return [];

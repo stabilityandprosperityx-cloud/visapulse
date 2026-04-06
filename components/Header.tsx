@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatCount } from "@/lib/format";
 
 export function Header({ totalCases }: { totalCases: number }) {
   return (
@@ -23,7 +24,7 @@ export function Header({ totalCases }: { totalCases: number }) {
           <p className="hidden items-center gap-1.5 text-sm text-zinc-500 sm:inline-flex">
             <span aria-hidden>👥</span>
             <span className="font-semibold text-[#22C55E]">
-              {totalCases.toLocaleString()}
+              {formatCount(totalCases)}
             </span>
             <span>cases shared</span>
           </p>

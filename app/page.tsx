@@ -4,7 +4,8 @@ import { FilterBar } from "@/components/FilterBar";
 import { CasesSection } from "@/components/CasesSection";
 import { AnalyticsSection } from "@/components/AnalyticsSection";
 import { LiveCasesMeta } from "@/components/LiveCasesMeta";
-import { fetchAllCases } from "@/lib/supabase/server";
+import { formatCount } from "@/lib/format";
+import { fetchAllCases, fetchTotalCaseCount } from "@/lib/supabase/server";
 import {
   getApprovalRateByCountry,
   getResultsByVisaType,
@@ -48,10 +49,13 @@ export default async function HomePage({
   const country = searchParams.country?.trim() || null;
   const visaType = searchParams.visa?.trim() || null;
 
-  const allCases = await fetchAllCases();
+  const [allCases, dbTotalCount] = await Promise.all([
+    fetchAllCases(),
+    fetchTotalCaseCount(),
+  ]);
   const filtered = filterCases(allCases, country, visaType);
 
-  const totalCount = allCases.length;
+  const totalCount = dbTotalCount;
   const overallRate = approvalRate(allCases);
   const mostApproved = topVisaByResult(allCases, "approved");
   const mostRejected = topVisaByResult(allCases, "rejected");
@@ -102,7 +106,7 @@ export default async function HomePage({
         />
         <StatPill
           label="Total cases"
-          value={totalCount.toLocaleString()}
+          value={formatCount(totalCount)}
           sub="Globally"
         />
         <StatPill
@@ -151,7 +155,7 @@ export default async function HomePage({
             Total cases (selection)
           </p>
           <p className="mt-2 text-4xl font-bold tabular-nums text-white">
-            {selTotal.toLocaleString()}
+            {formatCount(selTotal)}
           </p>
           <p className="mt-2 text-sm text-zinc-500">Matching filters</p>
         </div>
@@ -162,7 +166,7 @@ export default async function HomePage({
           <p className="mt-2 text-4xl font-bold tabular-nums text-accent">
             {selAvgIncome === null
               ? "—"
-              : `$${selAvgIncome.toLocaleString()}`}
+              : `$${selAvgIncome.toLocaleString("en-US")}`}
           </p>
           <p className="mt-2 text-sm text-zinc-500">
             Estimated midpoint from range

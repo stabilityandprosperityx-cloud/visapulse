@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatCount } from "@/lib/format";
 import type { VisaCase } from "@/lib/types";
 import { CaseCard } from "@/components/CaseCard";
 
@@ -22,7 +23,8 @@ export function CasesSection({
     <section className="mt-10">
       <h2 className="text-lg font-semibold text-white">Latest cases</h2>
       <p className="mt-1 text-sm text-zinc-500">
-        Showing {display.length} of {totalCount} total submissions
+        Showing {formatCount(display.length)} of {formatCount(totalCount)}{" "}
+        total submissions
       </p>
 
       <ul className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -58,7 +60,7 @@ export function CasesSection({
               <div className="absolute inset-0 flex items-center justify-center px-4">
                 <div className="max-w-md rounded-2xl border border-white/10 bg-background/95 p-6 text-center shadow-2xl backdrop-blur-sm">
                   <p className="text-base font-medium text-white">
-                    See all {totalCount} cases
+                    See all {formatCount(totalCount)} cases
                   </p>
                   <p className="mt-2 text-sm text-zinc-400">
                     Submit your own case to unlock the full list.
