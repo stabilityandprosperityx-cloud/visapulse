@@ -1,0 +1,28 @@
+-- 25 sample visa cases for VisaPulse (run after migration)
+
+insert into public.visa_cases (country, visa_type, income_range, result, processing_time, note, ip_hash, created_at) values
+  ('Portugal', 'Digital Nomad', '$3k-$5k', 'approved', '1-3 months', 'D7 route, straightforward docs.', 'seedhash01', now() - interval '2 days'),
+  ('Spain', 'Golden Visa', '$10k+', 'approved', '3-6 months', 'Property investment path.', 'seedhash02', now() - interval '5 days'),
+  ('Germany', 'Work', '$5k-$10k', 'rejected', '6+ months', 'Salary threshold questioned.', 'seedhash03', now() - interval '7 days'),
+  ('Canada', 'Student', '$1k-$3k', 'approved', 'Under 1 month', 'Masters program, SDS stream.', 'seedhash04', now() - interval '8 days'),
+  ('United States', 'Work', '$10k+', 'pending', '3-6 months', 'H-1B lottery + processing.', 'seedhash05', now() - interval '9 days'),
+  ('United Kingdom', 'Work', '$5k-$10k', 'approved', '1-3 months', 'Skilled Worker, sponsor in London.', 'seedhash06', now() - interval '10 days'),
+  ('Thailand', 'Retirement/Passive Income', '$3k-$5k', 'approved', 'Under 1 month', 'O-A long stay.', 'seedhash07', now() - interval '11 days'),
+  ('Mexico', 'Digital Nomad', '$1k-$3k', 'approved', 'Under 1 month', 'Temporary resident via income.', 'seedhash08', now() - interval '12 days'),
+  ('Australia', 'Student', 'Under $1k', 'approved', '1-3 months', 'Part-time work allowed on visa.', 'seedhash09', now() - interval '13 days'),
+  ('France', 'Tourist', '$3k-$5k', 'rejected', 'Under 1 month', 'Insufficient ties to home country.', 'seedhash10', now() - interval '14 days'),
+  ('United Arab Emirates', 'Work', '$5k-$10k', 'approved', '1-3 months', 'Free zone employment visa.', 'seedhash11', now() - interval '15 days'),
+  ('Japan', 'Digital Nomad', '$5k-$10k', 'pending', '1-3 months', 'New digital nomad category.', 'seedhash12', now() - interval '16 days'),
+  ('Italy', 'Golden Visa', '$10k+', 'approved', '6+ months', 'Investor quota delay but approved.', 'seedhash13', now() - interval '17 days'),
+  ('Netherlands', 'Work', '$3k-$5k', 'approved', '1-3 months', 'Highly skilled migrant scheme.', 'seedhash14', now() - interval '18 days'),
+  ('Singapore', 'Work', '$10k+', 'approved', 'Under 1 month', 'EP approved quickly with MNC.', 'seedhash15', now() - interval '19 days'),
+  ('Brazil', 'Tourist', '$1k-$3k', 'approved', 'Under 1 month', 'Tourism only, no issues.', 'seedhash16', now() - interval '20 days'),
+  ('India', 'Work', '$3k-$5k', 'approved', '1-3 months', 'Employment visa via Bangalore office.', 'seedhash17', now() - interval '21 days'),
+  ('South Korea', 'Student', 'Under $1k', 'approved', '1-3 months', 'Language program then degree.', 'seedhash18', now() - interval '22 days'),
+  ('New Zealand', 'Work', '$5k-$10k', 'rejected', '3-6 months', 'Points slightly below threshold.', 'seedhash19', now() - interval '23 days'),
+  ('Switzerland', 'Work', '$10k+', 'approved', '3-6 months', 'B permit after quota check.', 'seedhash20', now() - interval '24 days'),
+  ('Croatia', 'Digital Nomad', '$3k-$5k', 'approved', 'Under 1 month', 'Very smooth online application.', 'seedhash21', now() - interval '25 days'),
+  ('Ireland', 'Student', '$1k-$3k', 'approved', '1-3 months', 'Stamp 2 permission.', 'seedhash22', now() - interval '26 days'),
+  ('Malaysia', 'Digital Nomad', '$5k-$10k', 'pending', '1-3 months', 'DE Rantau still under review.', 'seedhash23', now() - interval '27 days'),
+  ('Poland', 'Digital Nomad', '$3k-$5k', 'approved', 'Under 1 month', 'Type D digital nomad pathway.', 'seedhash24', now() - interval '28 days'),
+  ('Greece', 'Golden Visa', '$10k+', 'approved', '3-6 months', 'RE purchase in Athens.', 'seedhash25', now() - interval '29 days');

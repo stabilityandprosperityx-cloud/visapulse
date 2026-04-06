@@ -1,0 +1,85 @@
+export const COUNTRIES = [
+  "United States",
+  "United Kingdom",
+  "Canada",
+  "Australia",
+  "Germany",
+  "France",
+  "Spain",
+  "Italy",
+  "Netherlands",
+  "Portugal",
+  "Ireland",
+  "Sweden",
+  "Norway",
+  "Switzerland",
+  "Japan",
+  "South Korea",
+  "Singapore",
+  "United Arab Emirates",
+  "New Zealand",
+  "Mexico",
+  "Brazil",
+  "Argentina",
+  "India",
+  "China",
+  "Thailand",
+  "Vietnam",
+  "Indonesia",
+  "Malaysia",
+  "Philippines",
+  "South Africa",
+  "Egypt",
+  "Turkey",
+  "Poland",
+  "Czech Republic",
+  "Austria",
+  "Belgium",
+  "Greece",
+  "Croatia",
+  "Hungary",
+  "Romania",
+  "Denmark",
+  "Finland",
+  "Israel",
+  "Saudi Arabia",
+  "Qatar",
+  "Colombia",
+  "Chile",
+  "Peru",
+  "Nigeria",
+  "Kenya",
+] as const;
+
+export const VISA_TYPES = [
+  "Tourist",
+  "Digital Nomad",
+  "Golden Visa",
+  "Student",
+  "Work",
+  "Retirement/Passive Income",
+  "Other",
+] as const;
+
+export const INCOME_RANGES = [
+  "Under $1k",
+  "$1k-$3k",
+  "$3k-$5k",
+  "$5k-$10k",
+  "$10k+",
+] as const;
+
+export const PROCESSING_TIMES = [
+  "Under 1 month",
+  "1-3 months",
+  "3-6 months",
+  "6+ months",
+] as const;
+
+export type ResultValue = "approved" | "rejected" | "pending";
+
+export const RESULT_LABELS: Record<ResultValue, string> = {
+  approved: "Approved",
+  rejected: "Rejected",
+  pending: "Pending",
+};
