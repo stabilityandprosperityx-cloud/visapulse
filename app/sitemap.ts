@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getPostSlugs } from "@/lib/blog";
 import { siteUrl } from "@/lib/site";
+import { COUNTRIES, VISA_TYPES, toSlug } from "@/lib/slugs";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteUrl();
@@ -11,6 +12,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
     priority: 0.75,
   }));
+  const countryPages = COUNTRIES.map((country) => ({
+    url: `${base}/${toSlug(country)}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.85,
+  }));
+  const countryVisaPages = COUNTRIES.flatMap((country) =>
+    VISA_TYPES.map((visaType) => ({
+      url: `${base}/${toSlug(country)}/${toSlug(visaType)}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.75,
+    }))
+  );
 
   return [
     {
@@ -31,6 +46,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.65,
     },
+    ...countryPages,
+    ...countryVisaPages,
     ...posts,
   ];
 }
